@@ -1,13 +1,9 @@
-"use client";
-
-import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { FadeIn } from "@/components/animations/FadeIn";
 
 const steps = [
   {
@@ -33,33 +29,6 @@ const steps = [
 ];
 
 export default function CeremonyPage() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    const ctx = gsap.context(() => {
-      const elements = gsap.utils.toArray(".step-card");
-      elements.forEach((el: unknown) => {
-        const element = el as HTMLElement;
-        gsap.fromTo(
-          element,
-          { opacity: 0, y: 50 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: element,
-              start: "top 85%",
-            }
-          }
-        );
-      });
-    }, containerRef);
-    return () => ctx.revert();
-  }, []);
-
   return (
     <div className="min-h-screen bg-background pt-24 pb-32">
       {/* Header */}
@@ -74,11 +43,18 @@ export default function CeremonyPage() {
       <Separator className="max-w-4xl mx-auto bg-border/50 mb-20" />
 
       {/* Steps */}
-      <div ref={containerRef} className="max-w-5xl mx-auto px-6 space-y-32">
+      <div className="max-w-5xl mx-auto px-6 space-y-32">
         {steps.map((step, index) => (
-          <div key={index} className={`step-card flex flex-col ${index % 2 !== 0 ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-12 md:gap-20`}>
+          <FadeIn key={index} className={`flex flex-col ${index % 2 !== 0 ? 'md:flex-row-reverse' : 'md:flex-row'} items-center gap-12 md:gap-20`}>
             <div className="w-full md:w-1/2 relative aspect-square md:aspect-[4/3]">
-              <Image src={step.image} alt={step.title} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
+              <Image 
+                src={step.image} 
+                alt={step.title} 
+                fill 
+                sizes="(max-width: 768px) 100vw, 50vw" 
+                className="object-cover" 
+                loading="lazy"
+              />
             </div>
             <div className="w-full md:w-1/2 flex flex-col justify-center">
               <span className="font-sans text-xs tracking-widest text-primary/60 mb-4 block">0{index + 1}</span>
@@ -87,7 +63,7 @@ export default function CeremonyPage() {
                 {step.description}
               </p>
             </div>
-          </div>
+          </FadeIn>
         ))}
       </div>
 

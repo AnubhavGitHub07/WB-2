@@ -1,61 +1,36 @@
-"use client";
-
-import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { companyConfig } from "@/config/company";
 import { Separator } from "@/components/ui/separator";
+import { FadeIn } from "@/components/animations/FadeIn";
 
 export default function AboutPage() {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const storyRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        ".fade-up",
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          stagger: 0.2,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: storyRef.current,
-            start: "top 80%",
-          },
-        }
-      );
-    });
-    return () => ctx.revert();
-  }, []);
-
   return (
     <div className="min-h-screen bg-background pt-24">
       {/* Hero */}
-      <section ref={heroRef} className="relative h-[60vh] w-full flex items-center justify-center overflow-hidden">
+      <section className="relative h-[60vh] w-full flex items-center justify-center overflow-hidden">
         <Image
           src="/images/hero.png"
           alt="翠月の茶室"
           fill
+          sizes="100vw"
           className="object-cover"
           priority
+          fetchPriority="high"
         />
         <div className="absolute inset-0 bg-black/40" />
-        <div className="relative z-10 text-center">
+        <FadeIn className="relative z-10 text-center">
           <h1 className="font-heading text-4xl md:text-5xl tracking-[0.2em] mb-4 text-white drop-shadow-sm">翠月について</h1>
           <span className="font-sans text-xs tracking-widest text-primary">私たちの歩み</span>
-        </div>
+        </FadeIn>
       </section>
 
       {/* Story */}
-      <section ref={storyRef} className="py-24 px-6 md:py-32">
+      <section className="py-24 px-6 md:py-32">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="font-heading text-3xl tracking-widest mb-12 fade-up">静寂が息づく場所</h2>
-          <div className="space-y-8 font-sans text-sm md:text-base leading-loose tracking-widest text-muted-foreground fade-up">
+          <FadeIn>
+            <h2 className="font-heading text-3xl tracking-widest mb-12">静寂が息づく場所</h2>
+          </FadeIn>
+          <FadeIn stagger className="space-y-8 font-sans text-sm md:text-base leading-loose tracking-widest text-muted-foreground">
             <p>
               {companyConfig.foundedYear}年、京都祇園の一角にひっそりと佇むようにして産声を上げた「翠月」。
               初代亭主・{companyConfig.founder}が、「真の安らぎを提供する場を」との思いでこの地に茶室を構えました。
@@ -69,7 +44,7 @@ export default function AboutPage() {
               何気ない日常のなかで、ふと立ち止まり、自分自身と向き合う時間。
               一服の茶がもたらす、かけがえのないひとときをお約束いたします。
             </p>
-          </div>
+          </FadeIn>
         </div>
       </section>
 
@@ -83,7 +58,9 @@ export default function AboutPage() {
               src="/images/hero.png"
               alt="伝統的な建築"
               fill
+              sizes="(max-width: 768px) 100vw, 50vw"
               className="object-cover"
+              loading="lazy"
             />
           </div>
           <div className="max-w-lg">

@@ -1,10 +1,6 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-import Image from "next/image";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Separator } from "@/components/ui/separator";
+import { FadeIn } from "@/components/animations/FadeIn";
+import { ParallaxImage } from "@/components/animations/ParallaxImage";
 
 const exhibits = [
   {
@@ -31,47 +27,6 @@ const exhibits = [
 ];
 
 export default function GalleryPage() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    const ctx = gsap.context(() => {
-      const images = gsap.utils.toArray(".exhibit-image");
-      images.forEach((img: unknown) => {
-        const imageElement = img as HTMLElement;
-        gsap.to(imageElement, {
-          yPercent: 10,
-          ease: "none",
-          scrollTrigger: {
-            trigger: imageElement.parentElement,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          }
-        });
-      });
-
-      const texts = gsap.utils.toArray(".exhibit-text");
-      texts.forEach((text: unknown) => {
-        const textElement = text as HTMLElement;
-        gsap.fromTo(textElement, 
-          { opacity: 0, y: 30 },
-          { 
-            opacity: 1, 
-            y: 0, 
-            duration: 1.5, 
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: textElement,
-              start: "top 85%"
-            }
-          }
-        );
-      });
-    }, containerRef);
-    return () => ctx.revert();
-  }, []);
-
   return (
     <div className="min-h-screen bg-background pt-24 pb-32">
       {/* Header */}
@@ -83,7 +38,7 @@ export default function GalleryPage() {
         </p>
       </div>
 
-      <div ref={containerRef} className="space-y-40 mt-10">
+      <div className="space-y-40 mt-10">
         {exhibits.map((exhibit, index) => (
           <div key={index} className="relative w-full">
             <div className="max-w-7xl mx-auto px-6 flex flex-col justify-center relative">
@@ -93,23 +48,22 @@ export default function GalleryPage() {
                 
                 {/* Text Content */}
                 <div className={`w-full ${exhibit.alignment === 'center' ? 'max-w-2xl text-center mb-16' : 'md:w-1/3 flex flex-col justify-center z-10'}`}>
-                  <div className="exhibit-text bg-background/90 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none p-6 md:p-0">
+                  <FadeIn className="bg-background/90 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none p-6 md:p-0">
                     <span className="font-sans text-xs tracking-widest text-primary mb-4 block">{exhibit.subtitle}</span>
                     <h2 className="font-heading text-3xl md:text-4xl tracking-widest mb-6">{exhibit.title}</h2>
                     <Separator className={`bg-border mb-6 ${exhibit.alignment === 'center' ? 'mx-auto' : ''} max-w-[100px]`} />
                     <p className="font-sans text-sm leading-loose tracking-widest text-muted-foreground">
                       {exhibit.description}
                     </p>
-                  </div>
+                  </FadeIn>
                 </div>
 
                 {/* Image */}
                 <div className={`w-full ${exhibit.alignment === 'center' ? 'aspect-video' : 'md:w-2/3 aspect-[4/3]'} relative overflow-hidden`}>
-                  <Image 
+                  <ParallaxImage 
                     src={exhibit.image} 
                     alt={exhibit.title} 
-                    fill 
-                    className="exhibit-image object-cover scale-110" 
+                    className="w-full h-full" 
                   />
                 </div>
                 

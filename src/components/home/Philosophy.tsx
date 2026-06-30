@@ -1,40 +1,10 @@
-"use client";
-
-import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { contentConfig } from "@/config/content";
+import { FadeIn } from "@/components/animations/FadeIn";
 
 export function Philosophy() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        textRef.current,
-        { opacity: 0, y: 50 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1.5,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 70%",
-          },
-        }
-      );
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section ref={containerRef} className="py-32 px-6 md:py-48 bg-background relative overflow-hidden">
+    <section className="py-32 px-6 md:py-48 bg-background relative overflow-hidden">
       {/* Background Image Layer */}
       <div className="absolute inset-0 z-0">
         <Image
@@ -43,13 +13,14 @@ export function Philosophy() {
           fill
           sizes="100vw"
           className="object-cover object-center"
+          loading="lazy"
         />
         {/* Darker overlay to ensure text readability against the detailed background */}
         <div className="absolute inset-0 bg-black/80" />
       </div>
 
       <div className="max-w-4xl mx-auto flex flex-col items-center text-center z-10 relative">
-        <div ref={textRef}>
+        <FadeIn>
           <h2 className="font-heading text-3xl md:text-5xl tracking-[0.2em] mb-12 text-white drop-shadow-lg">
             {contentConfig.philosophy.title}
           </h2>
@@ -69,9 +40,8 @@ export function Philosophy() {
               </div>
             ))}
           </div>
-        </div>
+        </FadeIn>
       </div>
-      
     </section>
   );
 }

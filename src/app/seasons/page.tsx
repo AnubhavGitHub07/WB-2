@@ -1,10 +1,6 @@
-"use client";
-
-import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Separator } from "@/components/ui/separator";
+import { FadeIn } from "@/components/animations/FadeIn";
 
 const seasons = [
   {
@@ -34,33 +30,6 @@ const seasons = [
 ];
 
 export default function SeasonsPage() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    const ctx = gsap.context(() => {
-      const cards = gsap.utils.toArray(".season-card");
-      cards.forEach((card: unknown) => {
-        const element = card as HTMLElement;
-        gsap.fromTo(
-          element,
-          { opacity: 0, y: 30 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1.5,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: element,
-              start: "top 80%",
-            }
-          }
-        );
-      });
-    }, containerRef);
-    return () => ctx.revert();
-  }, []);
-
   return (
     <div className="min-h-screen bg-background pt-24 pb-32">
       {/* Header */}
@@ -75,12 +44,19 @@ export default function SeasonsPage() {
       <Separator className="max-w-4xl mx-auto bg-border/50 mb-24" />
 
       {/* Seasons */}
-      <div ref={containerRef} className="max-w-6xl mx-auto px-6 space-y-32">
+      <div className="max-w-6xl mx-auto px-6 space-y-32">
         {seasons.map((season, index) => (
-          <div key={index} className="season-card flex flex-col md:flex-row gap-12 lg:gap-16 items-center">
+          <FadeIn key={index} className={`flex flex-col md:flex-row gap-12 lg:gap-16 items-center`}>
             <div className={`w-full md:w-1/2 ${index % 2 !== 0 ? 'md:order-2' : ''}`}>
               <div className="relative aspect-[4/3] overflow-hidden">
-                <Image src={season.image} alt={season.name} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
+                <Image 
+                  src={season.image} 
+                  alt={season.name} 
+                  fill 
+                  sizes="(max-width: 768px) 100vw, 50vw" 
+                  className="object-cover" 
+                  loading="lazy"
+                />
               </div>
             </div>
             <div className={`w-full md:w-1/2 ${index % 2 !== 0 ? 'md:order-1' : ''}`}>
@@ -90,7 +66,7 @@ export default function SeasonsPage() {
                 {season.description}
               </p>
             </div>
-          </div>
+          </FadeIn>
         ))}
       </div>
     </div>

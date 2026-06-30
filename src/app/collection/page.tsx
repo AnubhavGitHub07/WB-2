@@ -1,10 +1,6 @@
-"use client";
-
-import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Separator } from "@/components/ui/separator";
+import { FadeIn } from "@/components/animations/FadeIn";
 
 const collections = [
   {
@@ -43,33 +39,6 @@ const collections = [
 ];
 
 export default function CollectionPage() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    const ctx = gsap.context(() => {
-      const items = gsap.utils.toArray(".collection-item");
-      items.forEach((el: unknown) => {
-        const element = el as HTMLElement;
-        gsap.fromTo(
-          element,
-          { opacity: 0, y: 50 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: element,
-              start: "top 80%",
-            }
-          }
-        );
-      });
-    }, containerRef);
-    return () => ctx.revert();
-  }, []);
-
   return (
     <div className="min-h-screen bg-background pt-24 pb-32">
       {/* Header */}
@@ -84,12 +53,19 @@ export default function CollectionPage() {
       <Separator className="max-w-4xl mx-auto bg-border/50 mb-24" />
 
       {/* Collection List */}
-      <div ref={containerRef} className="max-w-6xl mx-auto px-6 space-y-32">
+      <div className="max-w-6xl mx-auto px-6 space-y-32">
         {collections.map((tea, index) => (
-          <div key={index} className="collection-item flex flex-col md:flex-row gap-12 lg:gap-24 items-start">
+          <FadeIn key={index} className="flex flex-col md:flex-row gap-12 lg:gap-24 items-start">
             <div className="w-full md:w-5/12 sticky top-32">
               <div className="relative aspect-[4/5] overflow-hidden">
-                <Image src={tea.image} alt={tea.name} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
+                <Image 
+                  src={tea.image} 
+                  alt={tea.name} 
+                  fill 
+                  sizes="(max-width: 768px) 100vw, 50vw" 
+                  className="object-cover" 
+                  loading="lazy"
+                />
               </div>
             </div>
             <div className="w-full md:w-7/12 flex flex-col pt-4">
@@ -128,7 +104,7 @@ export default function CollectionPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </FadeIn>
         ))}
       </div>
     </div>
