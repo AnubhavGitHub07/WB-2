@@ -1,20 +1,7 @@
 import type { Metadata } from "next";
-import { Noto_Serif_JP, Zen_Kaku_Gothic_New } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
-
-const notoSerifJP = Noto_Serif_JP({
-  variable: "--font-heading",
-  weight: ["400", "500", "700"],
-  subsets: ["latin"],
-});
-
-const zenKaku = Zen_Kaku_Gothic_New({
-  variable: "--font-sans",
-  weight: ["400", "500"],
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "翠月 (Suigetsu) | 伝統的な茶の湯の世界",
@@ -29,9 +16,12 @@ export default function RootLayout({
   return (
     <html
       lang="ja"
-      className={`${notoSerifJP.variable} ${zenKaku.variable} h-full antialiased scroll-smooth dark`}
+      className="h-full antialiased scroll-smooth dark font-sans"
     >
-      <body className="min-h-full flex flex-col font-sans bg-background text-foreground selection:bg-primary/20">
+      <head>
+        {/* Using native Japanese system fonts in globals.css to completely eliminate render-blocking fonts */}
+      </head>
+      <body className="min-h-full flex flex-col bg-background text-foreground selection:bg-primary/20">
         <Header />
         <main className="flex-1">
           {children}

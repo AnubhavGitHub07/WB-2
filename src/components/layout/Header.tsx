@@ -22,8 +22,9 @@ export function Header() {
   }, []);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border/50 transition-all duration-500">
-      <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
+    <>
+      <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border/50 transition-all duration-500">
+        <div className="max-w-7xl mx-auto px-6 h-24 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="group flex flex-col items-center justify-center">
           <span className="font-heading text-2xl tracking-widest text-foreground group-hover:text-primary transition-colors duration-300">
@@ -70,6 +71,7 @@ export function Header() {
           <Menu className="w-6 h-6 stroke-[1.5]" />
         </button>
       </div>
+    </header>
 
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
@@ -79,18 +81,18 @@ export function Header() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4 }}
-            className="fixed inset-0 z-50 bg-background/95 backdrop-blur-xl flex flex-col"
+            className="fixed inset-0 z-[100] bg-[#F9F8F6] flex flex-col"
           >
             <div className="flex justify-end p-8">
-              <button
+               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-2 text-foreground hover:text-primary transition-colors"
+                className="p-2 border border-[#C8A97E]/40 rounded-sm text-[#2E2E2E] hover:bg-[#C8A97E]/10 transition-colors"
                 aria-label="メニューを閉じる"
               >
-                <X className="w-8 h-8 stroke-[1]" />
+                <X className="w-6 h-6 stroke-[1]" />
               </button>
             </div>
-            <div className="flex-1 flex flex-col items-center justify-center gap-8">
+            <div className="flex-1 flex flex-col items-center justify-center gap-10">
               {navigationConfig.mainNav.map((item, i) => (
                 <motion.div
                   key={item.href}
@@ -102,7 +104,7 @@ export function Header() {
                   <Link
                     href={item.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="font-heading text-2xl tracking-widest text-foreground hover:text-primary transition-colors duration-300"
+                    className="font-sans text-xl md:text-2xl tracking-[0.2em] text-[#2E2E2E] hover:text-[#C8A97E] transition-colors duration-300"
                   >
                     {item.title}
                   </Link>
@@ -113,13 +115,13 @@ export function Header() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.5 }}
-              className="p-10 text-center text-sm text-muted-foreground tracking-widest"
+              className="p-10 text-center text-xs text-[#595959] tracking-widest"
             >
               {siteConfig.name} - {siteConfig.romanizedName}
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }
